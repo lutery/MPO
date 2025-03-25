@@ -15,12 +15,12 @@ class MPO(object):
         Maximum A Posteriori Policy Optimization (MPO) ; Discrete action-space ; Retrace
 
         Params:
-            env: gym environment
-            actor: actor network
-            critic: critic network
-            obs_shape: shape of observation (from env)
-            action_shape: shape of action
-            dual_constraint: learning rate of η in g(η)
+            env: gym environment，创建的虚拟环境
+            actor: actor network 动作模型
+            critic: critic network 评价模型
+            obs_shape: shape of observation (from env) 环境shape
+            action_shape: shape of action 动作shape
+            dual_constraint: learning rate of η in g(η) 其余的暂时没有传采用默认参数
             kl_constraint: Hard constraint on KL
             learning_rate: Bellman equation's decay for Q-retrace
             clip: 
