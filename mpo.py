@@ -60,6 +60,7 @@ class MPO(object):
         self.action_shape = action_shape
 
         self.critic = critic
+        # 可以采用了TargetNet
         self.target_critic = deepcopy(critic)
         for target_param, param in zip(self.target_critic.parameters(),
                                        self.critic.parameters()):
@@ -68,6 +69,7 @@ class MPO(object):
         self.critic_optimizer = torch.optim.Adam(self.critic.parameters(), lr=3e-4)
 
         self.actor = actor
+         # 可以采用了TargetNet
         self.target_actor = deepcopy(actor)
         for target_param, param in zip(self.target_actor.parameters(),
                                        self.actor.parameters()):

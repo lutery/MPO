@@ -3,12 +3,15 @@ import random
 
 
 class TrajBuffer(object):
+    '''
+    轨迹缓冲区
+    '''
     def __init__(self, env, n_steps, size=50000, raw_pixels=False):
         """
         A buffer for observations, actions, rewards, mu's, states, masks and dones values
-        :param env: (Gym environment) The environment to learn from
-        :param n_steps: (int) The number of steps to run for each environment
-        :param size: (int) The buffer size in number of steps
+        :param env: (Gym environment) The environment to learn from 游戏环境
+        :param n_steps: (int) The number of steps to run for each environment 每个环境运行的最大步数？todo
+        :param size: (int) The buffer size in number of steps 缓冲区大小（以步数为单位）？todo
         """
         self.n_env = env.num_envs
         self.n_steps = n_steps
