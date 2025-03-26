@@ -82,16 +82,21 @@ class MPO(object):
         self.η_kl = 0.0
 
         # buffer and others
+        # episode_length: 是设置每次采样的游戏游戏的步数长度
         self.buffer = TrajBuffer(env, episode_length, 100000)
         self.save_path = save_path
 
     def _sample_trajectory(self):
+        '''
+        采样轨迹数据，todo应该是连续的数据
+        '''
         mean_reward = 0
 
         for _ in range(self.sample_episodes):
             obs = self.env.reset()
             done = False
-
+            
+            # seq length, num envs, obs shape
             obs_b = np.zeros([self.episode_length, self.env.num_envs, self.obs_shape])
             action_b = np.zeros([self.episode_length, self.env.num_envs])
             reward_b = np.zeros([self.episode_length, self.env.num_envs])
@@ -99,6 +104,7 @@ class MPO(object):
             done_b = np.zeros([self.episode_length, self.env.num_envs])
 
             for steps in range(self.episode_length):
+                # 使用目标动作模型进行采样
                 action, prob = self.target_actor.action(torch.from_numpy(np.expand_dims(obs, axis=0)).to(self.device).float())
                 action = np.reshape(action.cpu().numpy(), -1)
                 prob = prob.cpu().numpy()
@@ -285,6 +291,9 @@ class MPO(object):
             self.save_model()
             
     def load_model(self):
+        '''
+        加载保存的模型
+        '''
         checkpoint = torch.load(self.save_path)
         self.critic.load_state_dict(checkpoint['critic_state_dict'])
         self.target_critic.load_state_dict(checkpoint['target_critic_state_dict'])

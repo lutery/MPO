@@ -14,11 +14,11 @@ class TrajBuffer(object):
         :param size: (int) The buffer size in number of steps 缓冲区大小（以步数为单位）？todo
         """
         self.n_env = env.num_envs
-        self.n_steps = n_steps
+        self.n_steps = n_steps # 看起来是每个环境的最大执行步数
         self.n_batch = self.n_env * self.n_steps
         # Each loc contains n_env * n_steps frames, thus total buffer is n_env * size frames
-        self.size = size // self.n_steps
-        self.raw_pixels = raw_pixels
+        self.size = size // self.n_steps # todo
+        self.raw_pixels = raw_pixels ## 是否使用原始像素数据 原始像素数据是rgb uint8，否则是float32
 
         if self.raw_pixels:
             self.height, self.width, self.n_channels = env.observation_space.shape
@@ -84,6 +84,14 @@ class TrajBuffer(object):
     def put(self, enc_obs, actions, rewards, mus, dones):
         """
         Adds a frame to the buffer
+
+        # seq length, num envs, obs shape
+        obs_b = np.zeros([self.episode_length, self.env.num_envs, self.obs_shape])
+        action_b = np.zeros([self.episode_length, self.env.num_envs])
+        reward_b = np.zeros([self.episode_length, self.env.num_envs])
+        prob_b = np.zeros([self.episode_length, self.env.num_envs, self.action_shape])
+        done_b = np.zeros([self.episode_length, self.env.num_envs])
+
         :param enc_obs: ([float]) the encoded observation
         :param actions: ([float]) the actions
         :param rewards: ([float]) the rewards
